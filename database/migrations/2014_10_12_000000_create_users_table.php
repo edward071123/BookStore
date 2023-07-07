@@ -51,6 +51,19 @@ class CreateUsersTable extends Migration
             $table->text('path', 30)->nullable();
             $table->dateTime('created_at')->nullable();
         });
+
+        Schema::create('book_edit_logs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->uuid('member_id');
+            $table->uuid('book_id');
+            $table->string('title', 60)->nullable()->comment('title');
+            $table->string('author', 30)->nullable()->comment('author');
+            $table->string('category', 30)->nullable()->comment('Email');
+            $table->date('publication_date')->nullable();
+            $table->integer('price')->default(0);
+            $table->integer('quantity')->default(0);
+            $table->dateTime('created_at')->nullable();
+        });
     }
 
     /**
@@ -60,6 +73,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('book_edit_logs');
         Schema::dropIfExists('book_images');
         Schema::dropIfExists('books');
         Schema::dropIfExists('members');

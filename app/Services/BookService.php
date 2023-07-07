@@ -153,7 +153,6 @@ class BookService extends Service
             $getBookOne->price              = $params['price'];
             $getBookOne->quantity           = $params['quantity'];
             $getBookOne->save();
-
             $this->bookImageRepository->deleterByBookId($getBookOne->id);
             foreach ($params['images'] as $image) {
                 $this->bookImageRepository->create(
@@ -166,6 +165,19 @@ class BookService extends Service
                 );
             }
 
+            DB::table('book_edit_logs')->insert(
+                [
+                    'book_id'                       => $getBookOne->id,
+                    'member_id'                     => $getAuthUser->id,
+                    'title'                         => $params['title'],
+                    'author'                        => $params['author'],
+                    'publication_date'              => $params['publicationDate'],
+                    'category'                      => $params['category'],
+                    'price'                         => $params['price'],
+                    'quantity'                      => $params['quantity'],
+                    'created_at'                    => date('Y-m-d H:i:s')
+                ]
+            );
             DB::connection()->commit();
         } catch (\Exception $e) {
             DB::connection()->rollback();
