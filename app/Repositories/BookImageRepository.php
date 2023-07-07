@@ -22,6 +22,11 @@ class BookImageRepository extends AbstractRepository
         parent::__construct();
     }
 
+    public function findByBookId($bookId)
+    {
+        return $this->model->where('book_id', $bookId)->pluck('name', 'path');
+    }
+
     public function deleterByBookId($bookId)
     {
         $this->model->where('book_id', $bookId)->delete();

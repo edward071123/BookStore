@@ -62,6 +62,7 @@ class CreateUsersTable extends Migration
             $table->date('publication_date')->nullable();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(0);
+            $table->longText('images')->nullable();
             $table->dateTime('created_at')->nullable();
         });
     }

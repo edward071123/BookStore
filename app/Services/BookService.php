@@ -92,13 +92,28 @@ class BookService extends Service
                 $this->bookImageRepository->create(
                     'bookimage',
                     [
-                        'book_id' => $book['model']->id,
-                        'name'    => $image['name'],
-                        'path'    => $image['path']
+                        'book_id'    => $book['model']->id,
+                        'name'       => $image['name'],
+                        'path'       => $image['path'],
+                        'created_at' => date('Y-m-d H:i:s')
                     ]
                 );
             }
 
+            DB::table('book_edit_logs')->insert(
+                [
+                    'book_id'                       => $book['model']->id,
+                    'member_id'                     => $getAuthUser->id,
+                    'title'                         => $params['title'],
+                    'author'                        => $params['author'],
+                    'publication_date'              => $params['publicationDate'],
+                    'category'                      => $params['category'],
+                    'price'                         => $params['price'],
+                    'quantity'                      => $params['quantity'],
+                    'images'                        => json_encode($params['images']),
+                    'created_at'                    => date('Y-m-d H:i:s')
+                ]
+            );
             DB::connection()->commit();
         } catch (\Exception $e) {
             DB::connection()->rollback();
@@ -158,9 +173,10 @@ class BookService extends Service
                 $this->bookImageRepository->create(
                     'bookimage',
                     [
-                        'book_id' => $getBookOne->id,
-                        'name'    => $image['name'],
-                        'path'    => $image['path']
+                        'book_id'    => $getBookOne->id,
+                        'name'       => $image['name'],
+                        'path'       => $image['path'],
+                        'created_at' => date('Y-m-d H:i:s')
                     ]
                 );
             }
@@ -175,6 +191,7 @@ class BookService extends Service
                     'category'                      => $params['category'],
                     'price'                         => $params['price'],
                     'quantity'                      => $params['quantity'],
+                    'images'                        => json_encode($params['images']),
                     'created_at'                    => date('Y-m-d H:i:s')
                 ]
             );
